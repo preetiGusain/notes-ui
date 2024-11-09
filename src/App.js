@@ -1,44 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import Home from './pages/home';
+import NotePage from './pages/notePage';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Note from './components/Note';
+import Create from './pages/create';
 
 function App() {
-
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    const getNotes = async () => {
-      try {
-        const response = await fetch("https://notes-api-y7g7.onrender.com/notes");
-        const data = await response.json();
-        console.log(data);
-        if (data && data.notes && data.notes.length > 0) {
-          setNotes(data.notes);
-        }
-      } catch (error) {
-        console.log("Error retrieving notes");
-      }
-    };
-    getNotes();
-  }, []);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <Container maxWidth="sm">
-          <Box sx={{ bgcolor: '#cfe8fc', height: '100%' }} >
-            <Stack spacing={2}>
-              {notes.map((note) => (
-                <Note key={note._id} title={note.title} content={note.content} />
-              ))}
-            </Stack>
-          </Box>
-        </Container>
-      </header>
-    </div>
+    <Container maxWidth="sm">
+      <Box sx={{ bgcolor: '#cfe8fc', height: '100%' }} >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/notes/create" element={<Create/>} />
+          <Route path="/notes/:id" element={<NotePage />} />
+        </Routes>
+      </Box>
+    </Container>
+
   );
 }
 
