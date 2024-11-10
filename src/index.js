@@ -12,7 +12,7 @@ import '@fontsource/roboto/700.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/notes-ui" >
       <App />
     </BrowserRouter>
   </React.StrictMode>
