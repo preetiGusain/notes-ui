@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import Stack from '@mui/material/Stack';
+import { useNavigate } from 'react-router-dom';
 
 function Create() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const navigate = useNavigate();
 
     const titleChange = (event) => {
         setTitle(event.target.value);
@@ -36,6 +42,14 @@ function Create() {
                 fullWidth
                 margin="normal"
             />
+            <Stack direction="row" spacing={2}>
+                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => navigate(`/`)}>
+                    Delete
+                </Button>
+                <Button variant="contained" endIcon={<SaveIcon />} >
+                    Save
+                </Button>
+            </Stack>
         </>
     );
 }
