@@ -19,6 +19,28 @@ function Create() {
         setContent(event.target.value);
     }
 
+    const saveNotes = async () => {
+        try {
+            const request = new Request("https://notes-api-y7g7.onrender.com/save", {
+                method: "POST",
+                body: JSON.stringify({
+                    title: title,
+                    content: content
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const response = await fetch(request);
+            if(response.ok) {
+                navigate('/');
+            }
+        } catch (error) {
+            console.error("note not saved", error);
+        }
+    };
+
     return (
         <>
             <h2>Create Note</h2>
@@ -46,7 +68,7 @@ function Create() {
                 <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => navigate(`/`)}>
                     Delete
                 </Button>
-                <Button variant="contained" endIcon={<SaveIcon />} >
+                <Button variant="contained" endIcon={<SaveIcon />} onClick={() => saveNotes()}>
                     Save
                 </Button>
             </Stack>
