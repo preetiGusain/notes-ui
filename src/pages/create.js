@@ -5,12 +5,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
 function Create() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [saveInProgress, setSaveInProgress] = useState(false);
+    const [saveError, setSaveError] = useState(false);
     const navigate = useNavigate();
 
     const titleChange = (event) => {
@@ -23,6 +25,7 @@ function Create() {
 
     const saveNotes = async () => {
         try {
+            setSaveError(false);
             setSaveInProgress(true);
             const request = new Request("https://notes-api-y7g7.onrender.com/save", {
                 method: "POST",
@@ -41,6 +44,8 @@ function Create() {
                 navigate('/');
             }
         } catch (error) {
+            setSaveInProgress(false);
+            setSaveError(true);
             console.error("note not saved", error);
         }
     };
@@ -84,6 +89,7 @@ function Create() {
                     Save
                 </LoadingButton>
             </Stack>
+            {saveError && <Alert severity="error">Failed to save note!</Alert>}
         </>
     );
 }
