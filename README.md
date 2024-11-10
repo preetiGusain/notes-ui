@@ -1,6 +1,27 @@
 # Notes-UI
 This is a simple Notes Application written using [React](https://react.dev/). This also uses [Material UI](https://mui.com/) for all it's components. It utilizes [React Router DOM](https://reactrouter.com/en/main) for navigation.
 
+## Pages
+
+### Home Page
+
+Displays all the notes saved in the database! User can click on a note to get redirected to the page specific to the particular note.
+
+The (+) button in the bottom navigates the user to the create note page. 
+
+![HomePage](HomePage.png)
+
+### Create page
+
+Contains input boxes to create a note. on clicking the save button the note gets added to the database, and the user is redirected to the home page.
+
+![CreatePage](CreatePage.png)
+
+### Note page
+
+This page is used to display a note. User can also delete the note by clicking the delete button.
+
+![NotePage](NotePage.png)
 
 ## Available Scripts
 
