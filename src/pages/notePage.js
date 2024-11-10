@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 function NotePage() {
     const { id } = useParams();
     const [note, setNote] = useState(null);
+    const [noteLoading, setNoteLoading] = useState(true);
+    const [deleteInProgress, setDeleteInProgress] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,6 +19,7 @@ function NotePage() {
                 const data = await response.json();
                 if (data && data.note) {
                     setNote(data.note);
+                    setNoteLoading(false);
                 }
             } catch (error) {
 
@@ -26,12 +30,14 @@ function NotePage() {
 
     const deleteNote = async () => {
         try {
+            setDeleteInProgress(true);
             const request = new Request(`https://notes-api-y7g7.onrender.com/delete/${id}`, {
                 method: "DELETE",
             });
 
             const response = await fetch(request);
-            if(response.ok) {
+            if (response.ok) {
+                setDeleteInProgress(false);
                 navigate('/');
             }
         } catch (error) {
@@ -42,11 +48,19 @@ function NotePage() {
 
     return (
         <div>
+            {noteLoading && <CircularProgress />}
             <h1>{note?.title}</h1>
             <p>{note?.content}</p>
-            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => deleteNote()}>
+            <LoadingButton
+                startIcon={<DeleteIcon />}
+                variant="outlined"
+                onClick={() => deleteNote()}
+                disabled={noteLoading}
+                loading={deleteInProgress}
+                loadingPosition="start"
+            >
                 Delete
-            </Button>
+            </LoadingButton>
         </div>
     );
 }

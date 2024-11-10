@@ -3,12 +3,14 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
 
 function Create() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [saveInProgress, setSaveInProgress] = useState(false);
     const navigate = useNavigate();
 
     const titleChange = (event) => {
@@ -21,6 +23,7 @@ function Create() {
 
     const saveNotes = async () => {
         try {
+            setSaveInProgress(true);
             const request = new Request("https://notes-api-y7g7.onrender.com/save", {
                 method: "POST",
                 body: JSON.stringify({
@@ -33,7 +36,8 @@ function Create() {
             });
 
             const response = await fetch(request);
-            if(response.ok) {
+            if (response.ok) {
+                setSaveInProgress(false);
                 navigate('/');
             }
         } catch (error) {
@@ -51,6 +55,7 @@ function Create() {
                 onChange={titleChange}
                 variant="filled"
                 fullWidth
+                disabled={saveInProgress}
             />
 
             <TextField
@@ -63,14 +68,21 @@ function Create() {
                 variant="filled"
                 fullWidth
                 margin="normal"
+                disabled={saveInProgress}
             />
             <Stack direction="row" spacing={2}>
-                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => navigate(`/`)}>
+                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => navigate(`/`)} disabled={saveInProgress}>
                     Delete
                 </Button>
-                <Button variant="contained" endIcon={<SaveIcon />} onClick={() => saveNotes()}>
+                <LoadingButton
+                    endIcon={<SaveIcon />}
+                    variant="contained"
+                    onClick={() => saveNotes()}
+                    loading={saveInProgress}
+                    loadingPosition="end"
+                >
                     Save
-                </Button>
+                </LoadingButton>
             </Stack>
         </>
     );

@@ -4,11 +4,13 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Note from '../components/Note';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 function Home() {
     const navigate = useNavigate();
 
     const [notes, setNotes] = useState([]);
+    const [notesLoading, setNotesloading] = useState(true);
 
     useEffect(() => {
         const getNotes = async () => {
@@ -18,6 +20,7 @@ function Home() {
                 console.log(data);
                 if (data && data.notes && data.notes.length > 0) {
                     setNotes(data.notes);
+                    setNotesloading(false);
                 }
             } catch (error) {
                 console.log("Error retrieving notes");
@@ -28,6 +31,7 @@ function Home() {
 
     return (
         <>
+            {notesLoading && <CircularProgress/>}
             <Stack spacing={2}>
                 {notes.map((note) => (
                     <Note key={note._id} id={note._id} title={note.title} content={note.content} />
