@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { backend_uri } from '../constants';
 
 function NotePage() {
     const { id } = useParams();
@@ -13,12 +15,13 @@ function NotePage() {
     const [noteLoadingError, setNoteLoadingError] = useState(false);
     const [deleteInProgress, setDeleteInProgress] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
+    const [loadingEdit, setLoadingEdit] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const getNote = async () => {
             try {
-                const response = await fetch(`https://notes-api-y7g7.onrender.com/notes/${id}`);
+                const response = await fetch(`${backend_uri}/notes/${id}`);
                 const data = await response.json();
                 if (data && data.note) {
                     setNote(data.note);
@@ -36,7 +39,7 @@ function NotePage() {
         try {
             setDeleteInProgress(true);
             setDeleteError(false);
-            const request = new Request(`https://notes-api-y7g7.onrender.com/delete/${id}`, {
+            const request = new Request(`${backend_uri}/delete/${id}`, {
                 method: "DELETE",
             });
 
@@ -52,6 +55,14 @@ function NotePage() {
         }
     };
 
+    const handleEditClick = () => {
+        setLoadingEdit(true);
+        setTimeout(() => {
+            navigate(`/edit/${id}`);
+            setLoadingEdit(false);
+        }, 2000);
+    };
+
 
     return (
         <div>
@@ -59,16 +70,32 @@ function NotePage() {
             {noteLoadingError && <Alert severity="error">Failed to load note!</Alert>}
             <h1>{note?.title}</h1>
             <p>{note?.content}</p>
-            <LoadingButton
-                startIcon={<DeleteIcon />}
-                variant="outlined"
-                onClick={() => deleteNote()}
-                disabled={noteLoading || note == null}
-                loading={deleteInProgress}
-                loadingPosition="start"
-            >
-                Delete
-            </LoadingButton>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                {/* Edit Button */}
+                <LoadingButton
+                    startIcon={<EditIcon />}
+                    variant="outlined"
+                    onClick={handleEditClick}
+                    loading={loadingEdit}
+                    loadingPosition='start'
+                >
+                    Edit
+                </LoadingButton>
+
+                {/* Delete Button */}
+                <LoadingButton
+                    startIcon={<DeleteIcon />}
+                    variant="outlined"
+                    onClick={() => deleteNote()}
+                    disabled={noteLoading || note == null}
+                    loading={deleteInProgress}
+                    loadingPosition="end"
+                >
+                    Delete
+                </LoadingButton>
+            </div>
+
             {deleteError && <Alert severity="error">Failed to delete note!</Alert>}
         </div>
     );

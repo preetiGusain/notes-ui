@@ -6,6 +6,7 @@ import Note from '../components/Note';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { backend_uri } from '../constants';
 
 function Home() {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Home() {
     useEffect(() => {
         const getNotes = async () => {
             try {
-                const response = await fetch("https://notes-api-y7g7.onrender.com/notes");
+                const response = await fetch(`${backend_uri}/notes`);
                 if(!response.ok) {
                     throw new Error("Server error");
                 }

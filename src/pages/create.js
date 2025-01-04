@@ -7,6 +7,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
+import { backend_uri } from '../constants';
 
 function Create() {
     const [title, setTitle] = useState('');
@@ -27,7 +28,7 @@ function Create() {
         try {
             setSaveError(false);
             setSaveInProgress(true);
-            const request = new Request("https://notes-api-y7g7.onrender.com/save", {
+            const request = new Request(`${backend_uri}/save`, {
                 method: "POST",
                 body: JSON.stringify({
                     title: title,
