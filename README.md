@@ -23,6 +23,12 @@ This page is used to display a note. User can also delete the note by clicking t
 
 ![NotePage](NotePage.png)
 
+### Edit
+
+The Edit option is used to edit the saved note.
+
+![Edit](edit_notes.png)
+
 ## Available Scripts
 
 In the project directory, you can run:
